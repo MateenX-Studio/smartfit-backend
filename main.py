@@ -102,13 +102,7 @@ def signup(auth: AuthRequest):
         return {"message": "Signup successful", "user_id": response.user.id}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-# @app.post("/signup")
-# def signup(auth: AuthRequest):
-#     response = supabase.auth.sign_up({
-#         "email": auth.email,
-#         "password": auth.password
-#     })
-#     return {"message": "Signup successful", "user_id": response.user.id}
+
 @app.post("/login")
 def login(auth: AuthRequest):
     response = supabase.auth.sign_in_with_password({
@@ -122,17 +116,7 @@ def login(auth: AuthRequest):
         "user_id": response.user.id
     }
 
-# @app.post("/login")
-# def login(auth: AuthRequest):
-#     response = supabase.auth.sign_in_with_password({
-#         "email": auth.email,
-#         "password": auth.password
-#     })
-#     return {
-#         "message": "Login successful",
-#         "access_token": response.session.access_token,
-#         "user_id": response.user.id
-#     }
+
 
 
 @app.post("/analyze")
@@ -191,10 +175,7 @@ Respond with ONLY a valid JSON object (no extra text, no markdown formatting) in
             status_code=503,
             detail="The AI service is temporarily busy. Please try again in a moment."
         )
-    # response = client.models.generate_content(
-    #     model="gemini-3.6-flash",
-    #     contents=prompt
-    # )
+  
 
     raw_text = response.text.strip()
     if raw_text.startswith("```"):
@@ -215,11 +196,7 @@ Respond with ONLY a valid JSON object (no extra text, no markdown formatting) in
     }).execute()
 
     return result    
-# @app.get("/history")
-# def get_history(user_id: str = Depends(get_current_user)):
-#     # Fetch all analyses belonging to this user, most recent first
-#     response = supabase.table("analyses").select("*").eq("user_id", user_id).order("id", desc=True).execute()
-#     return response.data
+
 @app.get("/history")
 def get_history(user_id: str = Depends(get_current_user)):
     response = supabase.table("analyses").select("*").eq("user_id", user_id).order("created_at", desc=True).execute()
