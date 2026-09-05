@@ -119,19 +119,33 @@ def signup(auth: AuthRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+# @app.post("/login")
+# def login(auth: AuthRequest):
+#     response = supabase.auth.sign_in_with_password({
+#         "email": auth.email,
+#         "password": auth.password
+#     })
+#     return {
+#         "message": "Login successful",
+#         "access_token": response.session.access_token,
+#         "refresh_token": response.session.refresh_token,
+#         "user_id": response.user.id
+#     }
 @app.post("/login")
 def login(auth: AuthRequest):
-    response = supabase.auth.sign_in_with_password({
-        "email": auth.email,
-        "password": auth.password
-    })
-    return {
-        "message": "Login successful",
-        "access_token": response.session.access_token,
-        "refresh_token": response.session.refresh_token,
-        "user_id": response.user.id
-    }
-
+    try:
+        response = supabase.auth.sign_in_with_password({
+            "email": auth.email,
+            "password": auth.password
+        })
+        return {
+            "message": "Login successful",
+            "access_token": response.session.access_token,
+            "refresh_token": response.session.refresh_token,
+            "user_id": response.user.id
+        }
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
 
 
 
