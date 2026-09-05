@@ -31,7 +31,7 @@ supabase = create_client(supabase_url, supabase_key)
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=["http://localhost:3000"],
+    
     allow_origins=["*"],  # Allow all origins (Vercel, localhost, etc.)
     allow_credentials=True,
     allow_methods=["*"],
@@ -93,16 +93,7 @@ class AuthRequest(BaseModel):
 def read_root():
     return {"message": "SmartFit AI backend is running!"}
 
-# @app.post("/signup")
-# def signup(auth: AuthRequest):
-#     try:
-#         response = supabase.auth.sign_up({
-#             "email": auth.email,
-#             "password": auth.password
-#         })
-#         return {"message": "Signup successful", "user_id": response.user.id}
-#     except Exception as e:
-#         raise HTTPException(status_code=400, detail=str(e))
+
 @app.post("/signup")
 def signup(auth: AuthRequest):
     try:
@@ -119,18 +110,7 @@ def signup(auth: AuthRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# @app.post("/login")
-# def login(auth: AuthRequest):
-#     response = supabase.auth.sign_in_with_password({
-#         "email": auth.email,
-#         "password": auth.password
-#     })
-#     return {
-#         "message": "Login successful",
-#         "access_token": response.session.access_token,
-#         "refresh_token": response.session.refresh_token,
-#         "user_id": response.user.id
-#     }
+
 @app.post("/login")
 def login(auth: AuthRequest):
     try:
