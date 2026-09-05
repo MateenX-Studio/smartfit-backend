@@ -93,6 +93,16 @@ class AuthRequest(BaseModel):
 def read_root():
     return {"message": "SmartFit AI backend is running!"}
 
+# @app.post("/signup")
+# def signup(auth: AuthRequest):
+#     try:
+#         response = supabase.auth.sign_up({
+#             "email": auth.email,
+#             "password": auth.password
+#         })
+#         return {"message": "Signup successful", "user_id": response.user.id}
+#     except Exception as e:
+#         raise HTTPException(status_code=400, detail=str(e))
 @app.post("/signup")
 def signup(auth: AuthRequest):
     try:
@@ -100,7 +110,12 @@ def signup(auth: AuthRequest):
             "email": auth.email,
             "password": auth.password
         })
-        return {"message": "Signup successful", "user_id": response.user.id}
+        return {
+            "message": "Signup successful",
+            "user_id": response.user.id,
+            "access_token": response.session.access_token if response.session else None,
+            "refresh_token": response.session.refresh_token if response.session else None,
+        }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
